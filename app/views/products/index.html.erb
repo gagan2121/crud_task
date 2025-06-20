@@ -7,7 +7,7 @@
         <%= link_to "New", new_product_path, class: "btn btn-sm btn-success" %>
       </div>
       
-      <div class="list-group" id="products">
+      <div class="list-group overflow-auto" id="products" style="max-height: 90vh;">
         <% @products.each do |product| %>
           <%= link_to product.name, product, 
               class: "list-group-item list-group-item-action #{'active' if product == @products.first}",
