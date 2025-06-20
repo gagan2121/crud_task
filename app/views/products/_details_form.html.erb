@@ -1,0 +1,20 @@
+<div class="nested-detail-wrapper card p-3 mb-3 border-secondary" data-new-record="<%= f.object.new_record? %>">
+  <div class="row g-3">
+    <div class="col-md-5">
+      <%= f.label :title, class: "form-label fw-bold" %>
+      <%= f.text_field :title, class: "form-control", required: true %>
+    </div>
+    
+    <div class="col-md-5">
+      <%= f.label :value, class: "form-label fw-bold" %>
+      <%= f.text_area :value, class: "form-control", rows: 1, required: true %>
+    </div>
+    
+    <div class="col-md-2 d-flex align-items-end">
+      <button type="button" class="btn btn-sm btn-danger w-100" data-action="click->nested-form#remove">
+        <i class="bi bi-trash"></i> Remove
+      </button>
+    </div>
+  </div>
+  <%= f.hidden_field :_destroy %>
+</div>

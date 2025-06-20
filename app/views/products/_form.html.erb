@@ -1,0 +1,70 @@
+<%= form_with(model: product, data: { controller: 'nested-form', nested_form_wrapper_selector_value: '.nested-form-wrapper' }, class: "needs-validation", novalidate: true) do |form| %>
+	<% if product.errors.any? %>
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+			<h4 class="alert-heading"><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h4>
+			<ul class="mb-0">
+				<% product.errors.each do |error| %>
+					<li><%= error.full_message %></li>
+				<% end %>
+			</ul>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+	<% end %>
+	<!-- Product Information Card -->
+	<div class="card mb-4">
+		<div class="card-header bg-primary text-white">
+			<h5>Product Information</h5>
+		</div>
+		<div class="card-body">
+			<div class="mb-3">
+				<%= form.label :name, class: "form-label fw-bold" %>
+				<%= form.text_field :name, class: "form-control", required: true %>
+				<div class="invalid-feedback">Please provide a product name.</div>
+			</div>
+			<div class="mb-3">
+				<%= form.label :description, class: "form-label fw-bold" %>
+				<%= form.text_area :description, class: "form-control", rows: 3 %>
+			</div>
+			<div class="mb-3">
+				<%= form.label :image, class: "form-label fw-bold" %>
+				<%= form.file_field :image, class: "form-control", accept: "image/*" %>
+				<% if product.image.attached? %>
+					<div class="mt-2">
+						<%= image_tag product.image, class: "img-thumbnail", style: "max-width: 200px;" %>
+						<div class="form-check mt-2">
+							<%= form.check_box :remove_image, class: "form-check-input" %>
+							<%= form.label :remove_image, "Remove current image", class: "form-check-label" %>
+						</div>
+					</div>
+				<% end %>
+			</div>
+		</div>
+	</div>
+	<!-- Sections Card -->
+	<div class="card mb-4">
+		<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+			<h5 class="mb-0">Product Sections</h5>
+			<button type="button" class="btn btn-sm btn-light" 
+              data-action="click->nested-form#add"
+				data-nested-form-target-param="sections_target">
+				<i class="bi bi-plus-circle"></i> Add Section
+			</button>
+		</div>
+		<div class="card-body">
+			<template data-nested-form-target="template">
+				<%= form.fields_for :sections, Section.new, child_index: 'NEW_RECORD' do |section_fields| %>
+					<%= render "section_form", f: section_fields %>
+				<% end %>
+			</template>
+			<div id="sections_target" data-nested-form-target="target" class="sections-container">
+				<%= form.fields_for :sections do |section_fields| %>
+					<%= render "section_form", f: section_fields %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+	<div class="d-flex justify-content-between mt-4">
+		<%= link_to "Cancel", products_path, class: "btn btn-outline-secondary" %>
+		<%= form.submit class: "btn btn-success px-4" %>
+	</div>
+<% end %>
